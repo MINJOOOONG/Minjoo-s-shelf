@@ -1,26 +1,301 @@
 @import "tailwindcss";
 
+/* ✅ 폰트는 layout.tsx의 next/font/local 변수(--font-ridi)를 사용 */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #1a1a1a;
+  --bg-card: #232323;
+  --bg-hover: #2a2a2a;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --text-muted: #666666;
+  --accent: #ff6b35;
+  --accent-secondary: #f7c59f;
+  --border: #333333;
+  --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-accent: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  /* Geist 변수는 유지해도 되지만, 전체 폰트는 body에서 RIDI로 강제함 */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+
+  /* ✅ 전체 기본 글씨체: RIDIBatang */
+  font-family: var(--font-ridi), "RIDIBatang", -apple-system, BlinkMacSystemFont,
+  "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+
+  overflow-x: hidden;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 107, 53, 0.5);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+.stagger-1 {
+  animation-delay: 0.1s;
+}
+.stagger-2 {
+  animation-delay: 0.2s;
+}
+.stagger-3 {
+  animation-delay: 0.3s;
+}
+.stagger-4 {
+  animation-delay: 0.4s;
+}
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--gradient-accent);
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(255, 107, 53, 0.1);
+}
+
+/* Progress bar */
+.progress-bar {
+  background: var(--bg-secondary);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: var(--gradient-accent);
+  border-radius: 999px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.progress-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+  );
+  animation: shimmer 2s infinite;
+  background-size: 200% 100%;
+}
+
+/* Option buttons */
+.option-btn {
+  background: var(--bg-secondary);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.option-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-accent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.option-btn:hover {
+  border-color: #555;
+  transform: translateX(4px);
+}
+
+.option-btn.selected {
+  border-color: var(--accent);
+  background: rgba(255, 107, 53, 0.1);
+}
+
+.option-btn.selected::before {
+  opacity: 0.05;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(35, 35, 35, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Book cover */
+.book-cover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.book-cover:hover {
+  transform: scale(1.05) rotate(-2deg);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effect */
+.glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Share buttons */
+.share-btn {
+  transition: all 0.3s ease;
+}
+
+.share-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Loading skeleton */
+.skeleton {
+  background: linear-gradient(
+          90deg,
+          var(--bg-secondary) 25%,
+          var(--bg-hover) 50%,
+          var(--bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }

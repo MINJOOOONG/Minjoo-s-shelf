@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "Bash(timeout:*)",
+      "Bash(powershell -Command \"Stop-Process -Id 20564 -Force; Start-Sleep -Seconds 2\")",
+      "Bash(powershell -Command \"cd 'C:\\\\Users\\\\zzz15\\\\OneDrive\\\\Desktop\\\\book\\\\moodshelf'; npm run dev\":*)"
+    ]
+  }
+}
